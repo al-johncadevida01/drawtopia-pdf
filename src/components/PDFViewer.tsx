@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import * as fabric from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
@@ -102,7 +101,20 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, activeTool, onPdfLoaded }
     if (fabricCanvas.isDrawingMode) {
       fabricCanvas.freeDrawingBrush.color = selectedColor;
       fabricCanvas.freeDrawingBrush.width = activeTool === 'marker' ? 12 : 2;
-      fabricCanvas.freeDrawingBrush.opacity = activeTool === 'marker' ? 0.5 : 1;
+      
+      // Set opacity for marker - needs to be set on objects since BaseBrush doesn't have opacity
+      if (activeTool === 'marker') {
+        // For marker tool we'll set opacity on newly created objects instead
+        fabricCanvas.on('path:created', (e) => {
+          if (e.path) {
+            e.path.set('opacity', 0.5);
+            fabricCanvas.renderAll();
+          }
+        });
+      } else {
+        // Remove listener when not using marker
+        fabricCanvas.off('path:created');
+      }
     }
     
     fabricCanvas.selection = activeTool === 'cursor';
@@ -248,6 +260,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, activeTool, onPdfLoaded }
         const dataURL = fabricCanvas.toDataURL({
           format: 'png',
           quality: 1,
+          multiplier: 1
         });
         
         const link = document.createElement('a');
