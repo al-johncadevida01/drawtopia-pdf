@@ -1,7 +1,7 @@
 
 import { PDFDocument } from 'pdf-lib';
 import { toast } from 'sonner';
-import { fabric } from 'fabric';
+import * as fabric from 'fabric';
 
 // Tool types
 export type DrawingTool = 

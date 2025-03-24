@@ -1,8 +1,9 @@
+
 import React, { useEffect, useRef, useState } from 'react';
-import { fabric } from 'fabric';
+import * as fabric from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
 import { toast } from 'sonner';
-import { ColorPicker } from './ColorPicker';
+import ColorPicker from './ColorPicker';
 import { DrawingTool, downloadPDF } from '@/utils/drawingUtils';
 import { cn } from '@/lib/utils';
 
