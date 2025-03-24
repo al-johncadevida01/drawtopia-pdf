@@ -185,17 +185,19 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, activeTool, onPdfLoaded }
         
         await page.render(renderContext).promise;
         
-        // Create fabric image from rendered PDF - fixed API usage
-        fabric.Image.fromURL(tempCanvas.toDataURL(), {
-          left: 0,
-          top: 0,
-          selectable: false,
-          evented: false,
-          onCreated: (img) => {
-            fabricCanvas.add(img);
-            fabricCanvas.renderAll();
-          }
-        });
+        // Create fabric image from rendered PDF - fixed for Fabric.js v6
+        const imgElement = new Image();
+        imgElement.src = tempCanvas.toDataURL();
+        imgElement.onload = () => {
+          const fabricImage = new fabric.Image(imgElement, {
+            left: 0,
+            top: 0,
+            selectable: false,
+            evented: false
+          });
+          fabricCanvas.add(fabricImage);
+          fabricCanvas.renderAll();
+        };
       }
     } catch (error) {
       console.error('Error rendering page:', error);
