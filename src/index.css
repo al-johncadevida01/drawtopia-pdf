@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 210 100% 50%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -33,22 +34,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -61,7 +46,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 210 100% 60%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -79,14 +64,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -97,5 +74,98 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .tool-button {
+    @apply flex flex-col items-center justify-center p-2 rounded-md transition-all duration-300
+    bg-tool hover:bg-tool-hover active:bg-tool-active border border-transparent hover:border-tool-border
+    text-tool-icon focus:outline-none focus:ring-2 focus:ring-primary/40;
+  }
+  
+  .tool-button.active {
+    @apply bg-primary/10 border-primary/30 text-primary shadow-sm;
+  }
+  
+  .tool-button-label {
+    @apply text-xs mt-1 font-medium opacity-80;
+  }
+  
+  .pdf-canvas-container {
+    @apply relative w-full h-full overflow-hidden bg-white shadow-lg rounded-md transition-all duration-300;
+  }
+  
+  .pdf-page {
+    @apply bg-white mx-auto my-4 shadow-md transition-transform duration-200;
+  }
+  
+  .pdf-controls {
+    @apply absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 
+    px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 shadow-sm;
+  }
+  
+  .color-swatch {
+    @apply w-6 h-6 rounded-full border-2 border-white shadow-sm cursor-pointer transition-transform hover:scale-110;
+  }
+  
+  .color-swatch.active {
+    @apply ring-2 ring-offset-2 ring-primary;
+  }
+}
+
+/* Canvas drawing styles */
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.canvas-container.drawing {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* PDF.js viewer customizations */
+.pdfViewer {
+  background-color: transparent !important;
+}
+
+.page {
+  margin-bottom: 16px !important;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.page:hover {
+  transform: translateY(-2px);
+}
+
+/* Smooth scroll behavior */
+.pdf-container {
+  scroll-behavior: smooth;
+}
+
+/* Loading animation */
+.loading-dot {
+  animation: loading 1.4s infinite ease-in-out both;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loading {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1.0);
   }
 }
